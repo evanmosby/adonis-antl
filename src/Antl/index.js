@@ -157,7 +157,7 @@ class Antl {
     debug('getting message for %s key from store', localeNode.join('.'))
     debug('using fallback key as %s', fallbackNode.join('.'))
 
-    let message = _.get(this._messages, localeNode, _.get(this._messages, fallbackNode, defaultValue))
+    let message = _.get(this._messages, localeNode.join('.'), _.get(this._messages, fallbackNode, defaultValue))
     if (typeof message === "string" && message.indexOf('@:') >= 0){
       message = message.replace(/@:\S*/g, function (match){
        return this.get(match.substr(2))
