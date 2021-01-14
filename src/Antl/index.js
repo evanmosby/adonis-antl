@@ -157,13 +157,11 @@ class Antl {
     debug('getting message for %s key from store', localeNode.join('.'))
     debug('using fallback key as %s', fallbackNode.join('.'))
 
-    let message = _.get(this._messages, localeNode.join('.'), _.get(this._messages, fallbackNode, defaultValue))
-    if (typeof message === "string" && message.indexOf('@:') >= 0){
-      message = message.replace(/@:\S*/g,  (match) => {
-       return this.get(match.substr(2))
-     })
-   }
-   return message
+    let message = _.get(this._messages, localeNode, _.get(this._messages, fallbackNode, defaultValue))
+    if (typeof message === "object"){
+      message = this._recursiveGet(message)
+    }
+    return message
   }
 
   /**
@@ -205,6 +203,29 @@ class Antl {
    */
   flatList (group) {
     return flatten(this.list(group))
+  }
+
+
+  _recursiveGet(obj) {
+    if (typeof obj === "object") {
+      for (const key in obj) {
+        obj[key] = this._recursiveGet(obj[key]);
+      }
+    } else if (typeof obj === "string" && obj.indexOf("@:") >= 0) {
+      const regex = /@:\S*/g;
+      const totMatches = obj.match(regex).length;
+      // If a single match, do a straight assignment to account for object links
+      if (totMatches === 1) {
+        obj = this.get(obj.substr(2));
+      }
+      // if more than one match, then do a string replace - no objects expected here
+      else {
+        obj = obj.replace(regex, (match) => {
+          return this.get(match.substr(2)) || "";
+        });
+      }
+    }
+    return obj;
   }
 }
 
