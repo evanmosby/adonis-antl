@@ -158,9 +158,10 @@ class Antl {
     debug('using fallback key as %s', fallbackNode.join('.'))
 
     let message = _.get(this._messages, localeNode.join('.'), _.get(this._messages, fallbackNode, defaultValue))
-    if (typeof message === "object"){
-      message = this._recursiveGet(message)
-    }
+    message = this._recursiveGet(message)
+    // if (typeof message === "object"){
+    //   message = this._recursiveGet(message)
+    // }
     return message
   }
 
