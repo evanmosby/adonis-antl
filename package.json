@@ -65,7 +65,9 @@
     "intl-messageformat": "^5.0.1",
     "intl-relativeformat": "^2.1.0",
     "lodash": "^4.17.11",
-    "require-all": "^3.0.0",
+    "require-all": "^3.0.0"
+  },
+  "devDependencies": {
     "snyk": "^1.189.0"
   },
   "snyk": true
